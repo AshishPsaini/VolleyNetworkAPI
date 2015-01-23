@@ -22,13 +22,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.priyashi.model.GSonmodel;
 import com.priyashi.volleyapiexample.app.AppController;
 import com.priyashi.volleyapiexample.volley.utils.Const;
+import com.priyashi.volleycontroler.GsonRequest;
+import com.priyashi.volleycontroler.VolleyManager;
 
 public class JsonRequestActivity extends Activity implements OnClickListener {
 
 	private String TAG = JsonRequestActivity.class.getSimpleName();
-	private Button btnJsonObj, btnJsonArray;
+	private Button btnJsonObj, btnJsonArray , btnGsonArray;
 	private TextView msgResponse;
 	private ProgressDialog pDialog;
 
@@ -42,6 +45,7 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
 
 		btnJsonObj = (Button) findViewById(R.id.btnJsonObj);
 		btnJsonArray = (Button) findViewById(R.id.btnJsonArray);
+		btnGsonArray = (Button) findViewById(R.id.btnGsonArray);
 		msgResponse = (TextView) findViewById(R.id.msgResponse);
 
 		pDialog = new ProgressDialog(this);
@@ -50,6 +54,7 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
 
 		btnJsonObj.setOnClickListener(this);
 		btnJsonArray.setOnClickListener(this);
+		btnGsonArray.setOnClickListener(this);
 	}
 
 	private void showProgressDialog() {
@@ -137,11 +142,29 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
 					}
 				});
 
-		// Adding request to request queue
-		AppController.getInstance().addToRequestQueue(req,
-				tag_json_arry);
-
-		// Cancelling request
+		// Adding request to request queue using Application Class 
+		/* 
+		  AppController.getInstance().addToRequestQueue(req,tag_json_arry);
+		 */
+		
+		
+		// Adding request to request queue using Single pattrn static method technique without tag
+           /*
+            VolleyManager.getInstance(getApplicationContext()).addToRequestQueue(req);
+            */
+		
+        
+		
+		// Adding request to request queue using Single pattrn static method technique with tag
+           
+          
+          VolleyManager.getInstance(getApplicationContext()).addToRequestQueue(req,"jsonrequest");
+          
+         
+         
+		
+           
+           // Cancelling request
 		// ApplicationController.getInstance().getRequestQueue().cancelAll(tag_json_arry);
 	}
 
@@ -154,8 +177,42 @@ public class JsonRequestActivity extends Activity implements OnClickListener {
 		case R.id.btnJsonArray:
 			makeJsonArryReq();
 			break;
+		case R.id.btnGsonArray:
+			makeGsonArryReq();
+			break;
 		}
 
+	}
+
+	private void makeGsonArryReq() {
+		
+		HashMap<String, String> headers = new HashMap<String, String>();
+		headers.put("Content-Type", "application/json");
+		
+		
+		GsonRequest<GSonmodel>	strReqs = new GsonRequest<GSonmodel>(Method.GET,
+				Const.URL_JSON_OBJECT,null, headers, new Response.Listener<GSonmodel>() {
+
+					@Override
+					public void onResponse(GSonmodel response) {
+						Log.d(TAG, response.toString());
+						msgResponse.setText(response.toString());
+						hideProgressDialog();
+
+					}
+				}, new Response.ErrorListener() {
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						VolleyLog.d(TAG, "Error: " + error.getMessage());
+						hideProgressDialog();
+					}
+				});
+
+		
+        VolleyManager.getInstance(getApplicationContext()).addToRequestQueue(strReqs,"jsonrequest");
+
+		
 	}
 
 }

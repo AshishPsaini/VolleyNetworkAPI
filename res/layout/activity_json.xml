@@ -20,6 +20,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/btn_json_array_request" />
+    
+    <Button
+        android:id="@+id/btnGsonArray"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_gson_array_request" />
 
     <TextView
         android:layout_width="fill_parent"

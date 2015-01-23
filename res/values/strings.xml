@@ -11,5 +11,6 @@
     
     <string name="btn_json_obj_request">Json Object Request</string>
     <string name="btn_json_array_request">Json Array Request</string>
+    <string name="btn_gson_array_request">GSON Array Request</string>
 
 </resources>

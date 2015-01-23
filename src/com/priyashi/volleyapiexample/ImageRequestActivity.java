@@ -42,6 +42,7 @@ public class ImageRequestActivity extends Activity {
 	}
 
 	private void makeImageRequest() {
+		
 		ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
 		// If you are using NetworkImageView
